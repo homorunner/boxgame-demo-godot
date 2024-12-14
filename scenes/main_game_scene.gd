@@ -30,8 +30,24 @@ var blocks: Array[GameNode] = [] # array of blocks in this game
 
 var grid_size = 48
 
-func on_move(dir: Vector2i):
-	player_pos += dir
+func on_move_up():
+	player_pos.y -= 1
+	launch_movement('up')
+
+func on_move_down():
+	player_pos.y += 1
+	launch_movement('down')
+
+func on_move_left():
+	player_pos.x -= 1
+	launch_movement('left')
+
+func on_move_right():
+	player_pos.x += 1
+	launch_movement('right')
+
+func launch_movement(dir: String):
+	$Player.move_to(player_pos * grid_size, dir)
 
 func _ready() -> void:
 	var game_map_string = """
@@ -69,6 +85,7 @@ oooooooooo
 				blocks.append(Grass.new(j, i)) # currently, starting point must be a grass node.
 				player_pos.x = j
 				player_pos.y = i
+				$Player.position = player_pos * grid_size
 			else:
 				blocks.append(GameNode.new(j, i))
 	print('parsing game map: blocks.size() = ', len(blocks))
@@ -88,13 +105,13 @@ oooooooooo
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		if event.is_action("up"):
-			on_move(Vector2i(0, -1))
+			on_move_up()
 		elif event.is_action("down"):
-			on_move(Vector2i(0, 1))
+			on_move_down()
 		elif event.is_action("left"):
-			on_move(Vector2i(-1, 0))
+			on_move_left()
 		elif event.is_action("right"):
-			on_move(Vector2i(1, 0))
+			on_move_right()
 
 func _process(delta: float) -> void:
-	$Player.position = player_pos * grid_size
+	pass

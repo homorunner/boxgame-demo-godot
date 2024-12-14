@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dqvdwkal1dx22"]
+[gd_scene load_steps=14 format=3 uid="uid://dqvdwkal1dx22"]
 
 [ext_resource type="Script" path="res://scenes/main_game_scene.gd" id="1_6htq5"]
 [ext_resource type="TileSet" uid="uid://bwmsi8dayhcem" path="res://tiles/wall.tres" id="1_tg7ju"]
@@ -7,6 +7,150 @@
 [ext_resource type="Script" path="res://scenes/wall.gd" id="3_ypebr"]
 [ext_resource type="Texture2D" uid="uid://btekdt3ydbo4b" path="res://assets/player.png" id="4_hm02f"]
 [ext_resource type="Script" path="res://scenes/player.gd" id="7_bsax4"]
+
+[sub_resource type="Animation" id="Animation_gvh3s"]
+resource_name = "player_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 0.875),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.84), Vector2(0.9, 0.97), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1.875, 1, 0.875),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 5), Vector2(12, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_xj70s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rhsx6"]
+resource_name = "player_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 0.875),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.84), Vector2(0.9, 0.97), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1.875, 1, 0.875),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 5), Vector2(-6, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_uck84"]
+resource_name = "player_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.84, 1), Vector2(1, 0.9), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1.875, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(3, 0), Vector2(0, -6), Vector2(0, -6), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_6bhyx"]
+resource_name = "player_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.84, 1), Vector2(1, 0.9), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1.875, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(3, 0), Vector2(0, 6), Vector2(0, 6), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sbtau"]
+_data = {
+"RESET": SubResource("Animation_xj70s"),
+"player_down": SubResource("Animation_6bhyx"),
+"player_left": SubResource("Animation_rhsx6"),
+"player_right": SubResource("Animation_gvh3s"),
+"player_up": SubResource("Animation_uck84")
+}
 
 [node name="TestScene" type="Node2D"]
 
@@ -26,7 +170,15 @@ tile_set = ExtResource("2_3f61p")
 script = ExtResource("3_keq3o")
 metadata/_edit_group_ = true
 
-[node name="Player" type="Sprite2D" parent="MainGameScene"]
+[node name="Player" type="Node2D" parent="MainGameScene"]
+script = ExtResource("7_bsax4")
+
+[node name="PlayerNode" type="Sprite2D" parent="MainGameScene/Player"]
 texture = ExtResource("4_hm02f")
 centered = false
-script = ExtResource("7_bsax4")
+
+[node name="PlayerNodeAnimation" type="AnimationPlayer" parent="MainGameScene/Player"]
+root_node = NodePath("../PlayerNode")
+libraries = {
+"": SubResource("AnimationLibrary_sbtau")
+}
