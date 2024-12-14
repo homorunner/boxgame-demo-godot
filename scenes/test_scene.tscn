@@ -1,0 +1,32 @@
+[gd_scene load_steps=8 format=3 uid="uid://dqvdwkal1dx22"]
+
+[ext_resource type="Script" path="res://scenes/main_game_scene.gd" id="1_6htq5"]
+[ext_resource type="TileSet" uid="uid://bwmsi8dayhcem" path="res://tiles/wall.tres" id="1_tg7ju"]
+[ext_resource type="TileSet" uid="uid://w3etkuk2ark5" path="res://tiles/grass.tres" id="2_3f61p"]
+[ext_resource type="Script" path="res://scenes/grass.gd" id="3_keq3o"]
+[ext_resource type="Script" path="res://scenes/wall.gd" id="3_ypebr"]
+[ext_resource type="Texture2D" uid="uid://btekdt3ydbo4b" path="res://assets/player.png" id="4_hm02f"]
+[ext_resource type="Script" path="res://scenes/player.gd" id="7_bsax4"]
+
+[node name="TestScene" type="Node2D"]
+
+[node name="MainGameScene" type="Node2D" parent="."]
+position = Vector2(80, 80)
+script = ExtResource("1_6htq5")
+
+[node name="Wall" type="TileMapLayer" parent="MainGameScene"]
+scale = Vector2(3, 3)
+tile_set = ExtResource("1_tg7ju")
+script = ExtResource("3_ypebr")
+metadata/_edit_group_ = true
+
+[node name="Grass" type="TileMapLayer" parent="MainGameScene"]
+scale = Vector2(3, 3)
+tile_set = ExtResource("2_3f61p")
+script = ExtResource("3_keq3o")
+metadata/_edit_group_ = true
+
+[node name="Player" type="Sprite2D" parent="MainGameScene"]
+texture = ExtResource("4_hm02f")
+centered = false
+script = ExtResource("7_bsax4")
