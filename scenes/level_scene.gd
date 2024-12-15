@@ -232,15 +232,21 @@ func on_move_up():
 	if test_collision_and_push(0, -1):
 		player_pos.y -= 1
 		launch_movement('up')
+	else:
+		launch_movement('up')
 
 func on_move_down():
 	if test_collision_and_push(0, 1):
 		player_pos.y += 1
 		launch_movement('down')
+	else:
+		launch_movement('down')
 
 func on_move_left():
 	if test_collision_and_push(-1, 0):
 		player_pos.x -= 1
+		launch_movement('left')
+	else:
 		launch_movement('left')
 
 func on_move_right():
