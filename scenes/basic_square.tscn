@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://drvr6u71488qv"]
+
+[ext_resource type="Script" path="res://scenes/basic_square.gd" id="1_6u2xt"]
+
+[node name="BasicSquare" type="Node2D"]
+script = ExtResource("1_6u2xt")
+
+[node name="ColorBorder" type="ColorRect" parent="."]
+offset_right = 48.0
+offset_bottom = 48.0
+color = Color(0.385493, 0.385492, 0.385492, 1)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 47.0
+offset_bottom = 47.0
+color = Color(0.98386, 0.734273, 1.15514e-06, 1)

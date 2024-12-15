@@ -1,6 +1,6 @@
 extends Node2D
 
-var SPEED = 3.2
+var SPEED = 5
 
 var target_position: Vector2
 var pending_positions: Array[Vector2]
@@ -24,7 +24,7 @@ func move_to(pos: Vector2, dir: String):
 
 func _process(delta: float):
 	if not idle:
-		if self.position.distance_to(target_position) < (delta * speed).length():
+		if self.position.distance_to(target_position) < (delta * speed).length() + 0.01:
 			self.position = target_position
 			if len(pending_positions) >= 1:
 				move_to_immediately(pending_positions[0], pending_anims[0])
