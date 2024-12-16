@@ -92,8 +92,8 @@ class BoxNode:
 	func set_color(color_id: int):
 		basic_square.set_color(Colors[color_id])
 	
-	func move_to(pos: Vector2i):
-		self.basic_square.position = pos * grid_size
+	func move_to(pos: Vector2i, dir: String):
+		self.basic_square.move_to(pos * grid_size, dir)
 
 class Polynomino:
 	var poly_id: int
@@ -191,7 +191,7 @@ func init_polys():
 				polynominos.append(poly)
 				print('initializing polys: id = ', poly.poly_id, ', box_ids = ', poly.box_ids)
 
-func test_collision_and_push(dx: int, dy: int) -> bool:
+func test_collision_and_push(dx: int, dy: int, dir: String) -> bool:
 	var wall = get_wall(player_pos.x + dx, player_pos.y + dy)
 	if wall != null:
 		return false
@@ -221,7 +221,7 @@ func test_collision_and_push(dx: int, dy: int) -> bool:
 				var boxx: Box = gamenodes[i]
 				boxx.pos.x += dx
 				boxx.pos.y += dy
-				box_nodes[boxx.node_id].move_to(boxx.pos)
+				box_nodes[boxx.node_id].move_to(boxx.pos, dir)
 				
 			# after a poly move, we reinit the box map
 			init_box_map()
@@ -229,28 +229,28 @@ func test_collision_and_push(dx: int, dy: int) -> bool:
 	return can_move
 	
 func on_move_up():
-	if test_collision_and_push(0, -1):
+	if test_collision_and_push(0, -1, 'up'):
 		player_pos.y -= 1
 		launch_movement('up')
 	else:
 		launch_movement('up')
 
 func on_move_down():
-	if test_collision_and_push(0, 1):
+	if test_collision_and_push(0, 1, 'down'):
 		player_pos.y += 1
 		launch_movement('down')
 	else:
 		launch_movement('down')
 
 func on_move_left():
-	if test_collision_and_push(-1, 0):
+	if test_collision_and_push(-1, 0, 'left'):
 		player_pos.x -= 1
 		launch_movement('left')
 	else:
 		launch_movement('left')
 
 func on_move_right():
-	if test_collision_and_push(1, 0):
+	if test_collision_and_push(1, 0, 'right'):
 		player_pos.x += 1
 		launch_movement('right')
 	else:

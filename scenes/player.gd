@@ -9,10 +9,10 @@ var idle: bool = true
 var speed: Vector2
 
 func move_to_immediately(pos: Vector2, dir: String):
-		target_position = pos
-		$PlayerNodeAnimation.stop()
-		$PlayerNodeAnimation.play("player_" + dir, -1, SPEED)
-		speed = (pos - self.position) * SPEED
+	target_position = pos
+	$PlayerNodeAnimation.stop()
+	$PlayerNodeAnimation.play("player_" + dir, -1, SPEED)
+	speed = (pos - self.position) * SPEED
 
 func move_to(pos: Vector2, dir: String):
 	if idle:

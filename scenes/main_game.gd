@@ -17,6 +17,7 @@ const CAMERA_RECTS: Array[Rect2] = [
 ]
 
 var levels: Array[Node] = []
+var target_position: Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -31,7 +32,7 @@ func _ready() -> void:
 			var goto_next_level = func():
 				levels[level_id].deactivate()
 				levels[level_id + 1].activate()
-				self.position = Vector2(80, 80) - LEVEL_RECTS[level_id + 1].position * grid_size
+				target_position = Vector2(80, 80) - LEVEL_RECTS[level_id + 1].position * grid_size
 			level.win.connect(goto_next_level)
 		# TODO: last_level.win may connect to a YOU-WIN stage.
 
@@ -41,8 +42,9 @@ func _ready() -> void:
 		level.deactivate()
 	
 	levels[0].activate()
-	self.position = Vector2(80, 80) - LEVEL_RECTS[0].position * grid_size
+	target_position = Vector2(80, 80) - LEVEL_RECTS[0].position * grid_size
+	self.position = target_position
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	self.position = lerp(self.position, target_position, 2 * delta)
