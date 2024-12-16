@@ -6,14 +6,16 @@ const max_height = 480
 
 const LevelScene = preload("res://scenes/level_scene.tscn")
 
-const LEVEL_COUNT = 2
+const LEVEL_COUNT = 3
 const LEVEL_RECTS: Array[Rect2] = [
 	Rect2(1, 0, 8, 8),
 	Rect2(0, 8, 9, 8),
+	Rect2(9, 12, 14, 5),
 ]
 const CAMERA_RECTS: Array[Rect2] = [
 	Rect2(1, 0, 8, 8),
 	Rect2(0, 8, 9, 8),
+	Rect2(9, 12, 14, 5), # TODO: movable camera in one level
 ]
 
 var levels: Array[Node] = []

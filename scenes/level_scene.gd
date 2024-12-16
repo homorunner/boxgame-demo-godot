@@ -2,7 +2,7 @@ extends Node2D
 
 # constants
 enum {NODE_UNDEFINED, NODE_WALL, NODE_GRASS, NODE_BOX}
-const Colors = [Color.WHITE, Color.GOLD, Color.CYAN, Color.ORANGE_RED, Color.OLIVE_DRAB]
+const Colors = [Color.WHITE, Color.GOLD, Color.CYAN, Color.ORANGE_RED, Color.CORNFLOWER_BLUE, Color.PALE_GREEN]
 
 const grid_size = 48
 
@@ -23,14 +23,21 @@ oEoooooo
 	"""
 ooSoooooo
 o..3....o
-o..32222o
-o..3..1.o
-o..3..1.o
+o..3....o
+o..35555o
+o..3511.o
 o.44441.o
-o.....1..
+o2222.1..E
+o....oooo
 ooooooooo
-ooooooooo
-"""  # Level 1 ( just a placeholder without design )
+""",  # Level 1
+	"""
+oooooooooooooo
+oooooooooooooo
+S.............
+oooooooooooooo
+oooooooooooooo
+""", # Level 2
 ]
 
 # signals
