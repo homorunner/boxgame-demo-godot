@@ -32,16 +32,38 @@ o....oooo
 ooooooooo
 """,  # Level 1
 	"""
-oooooooooooooo
-oooooooooooooo
-S.............
-oooooooooooooo
-oooooooooooooo
+ooo
+S.o
+o.o
+oEo
 """, # Level 2
+	"""
+   oooooo
+oSoo....o
+o....33.o
+o.222.33o
+o...44..o
+o....4..o
+o....4..o
+o....111o
+o......1o
+oooooooEo
+""", # Level 3
+   """
+ooooooSo
+o......o
+o......o
+o...33.o
+o.1113.o
+o...13.o
+o..2222o
+o.44...o
+o..44..o
+ooooooEo
+""", # Level 4
 ]
 
 # signals
-
 signal win
 
 # class definitions
