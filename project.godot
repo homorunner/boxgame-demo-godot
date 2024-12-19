@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 FPSGraphOverlay="*res://addons/fps_graph_overlay/FPSGraphOverlay.tscn"
+Globals="*res://globals.gd"
 
 [display]
 

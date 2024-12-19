@@ -2,19 +2,22 @@ extends Node2D
 
 var SPEED = 5
 
-var target_position: Vector2
-var pending_positions: Array[Vector2]
+var current_position: Vector2i
+var target_position: Vector2i
+var pending_positions: Array[Vector2i]
 var pending_anims: Array[String]
 var idle: bool = true
 var speed: Vector2
 
-func move_to_immediately(pos: Vector2, dir: String):
+signal after_move
+
+func move_to_immediately(pos: Vector2i, dir: String):
 	target_position = pos
 	$PlayerNodeAnimation.stop()
 	$PlayerNodeAnimation.play("player_" + dir, -1, SPEED)
-	speed = (pos - self.position) * SPEED
+	speed = (pos * Globals.grid_size - self.position) * SPEED
 
-func move_to(pos: Vector2, dir: String):
+func move_to(pos: Vector2i, dir: String):
 	if idle:
 		move_to_immediately(pos, dir)
 		idle = false
@@ -24,8 +27,10 @@ func move_to(pos: Vector2, dir: String):
 
 func _process(delta: float):
 	if not idle:
-		if self.position.distance_to(target_position) < (delta * speed).length() + 0.01:
-			self.position = target_position
+		if self.position.distance_to(target_position * Globals.grid_size) < (delta * speed).length() + 0.01:
+			self.position = target_position * Globals.grid_size
+			self.current_position = target_position
+			self.after_move.emit()
 			if len(pending_positions) >= 1:
 				move_to_immediately(pending_positions[0], pending_anims[0])
 				pending_positions.pop_front()

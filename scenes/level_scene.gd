@@ -4,64 +4,7 @@ extends Node2D
 enum {NODE_UNDEFINED, NODE_WALL, NODE_GRASS, NODE_BOX}
 const Colors = [Color.WHITE, Color.GOLD, Color.CYAN, Color.ORANGE_RED, Color.CORNFLOWER_BLUE, Color.PALE_GREEN]
 
-const grid_size = 48
-
 const BasicSquare = preload("res://scenes/basic_square.tscn")
-
-const Levels = [
-	"""
-oooooooo
-oS..1.oo
-o..11.oo
-o.21...o
-oo2....o
-o22...oo
-o.oooooo
-o.oooooo
-oEoooooo
-""",  # Level 0
-	"""
-ooSoooooo
-o..3....o
-o..3....o
-o..35555o
-o..3511.o
-o.44441.o
-o2222.1..E
-o....oooo
-ooooooooo
-""",  # Level 1
-	"""
-ooo
-S.o
-o.o
-oEo
-""", # Level 2
-	"""
-   oooooo
-oSoo....o
-o....33.o
-o.222.33o
-o...44..o
-o....4..o
-o....4..o
-o....111o
-o......1o
-oooooooEo
-""", # Level 3
-   """
-ooooooSo
-o......o
-o......o
-o...33.o
-o.1113.o
-o...13.o
-o..2222o
-o.44...o
-o..44..o
-ooooooEo
-""", # Level 4
-]
 
 # signals
 signal win
@@ -112,7 +55,7 @@ class BoxNode:
 	
 	func _init(_box: Box):
 		var _basic_square = BasicSquare.instantiate()
-		_basic_square.position = _box.pos * grid_size
+		_basic_square.position = _box.pos * Globals.grid_size
 		_basic_square.set_color(Colors[_box.color_id])
 		
 		self.box = _box
@@ -122,7 +65,7 @@ class BoxNode:
 		basic_square.set_color(Colors[color_id])
 	
 	func move_to(pos: Vector2i, dir: String):
-		self.basic_square.move_to(pos * grid_size, dir)
+		self.basic_square.move_to(pos * Globals.grid_size, dir)
 
 class Polynomino:
 	var poly_id: int
@@ -286,16 +229,21 @@ func on_move_right():
 		launch_movement('right')
 
 func launch_movement(dir: String):
-	$Player.move_to(player_pos * grid_size, dir)
-	if player_pos == destination_pos:
+	$Player.move_to(player_pos, dir)
+	
+func win_detect():
+	if $Player.current_position == destination_pos:
 		print('level ', current_level, ' win.')
 		win.emit()
+
+func init_signals():
+	$Player.after_move.connect(win_detect)
 
 var current_level = 0
 
 func init(level:int):
 	current_level = level
-	var game_map_string = Levels[level]
+	var game_map_string = Globals.levels[level]
 	var _lines = game_map_string.split('\n')
 	var game_map_lines = []
 	rows = 0
@@ -325,7 +273,7 @@ func init(level:int):
 				gamenodes.append(Grass.new(j, i)) # currently, player starting point must be a grass node.
 				player_pos.x = j
 				player_pos.y = i
-				$Player.position = player_pos * grid_size
+				$Player.position = player_pos * Globals.grid_size
 			elif line[j] == 'E':
 				gamenodes.append(Grass.new(j, i)) # currently, destination point must be a grass node.
 				destination_pos.x = j
@@ -340,6 +288,8 @@ func init(level:int):
 	
 	# Initialize polynominos
 	init_polys()
+	
+	init_signals()
 	
 	# Set grass terrain list (static)
 	for i in range(len(gamenodes)):
