@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 const max_width = 480

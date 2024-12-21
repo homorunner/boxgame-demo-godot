@@ -5,4 +5,5 @@
 [node name="Root" type="Node"]
 
 [node name="MainScene" type="Node2D" parent="."]
+position = Vector2(200, 224)
 script = ExtResource("1_p042y")

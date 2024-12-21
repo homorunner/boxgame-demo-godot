@@ -1,3 +1,4 @@
+@tool
 extends TileMapLayer
 
 var grass_list = Array()

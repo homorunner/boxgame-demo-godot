@@ -1,3 +1,4 @@
+@tool
 extends TileMapLayer
 
 func add_node(pos: Vector2i):
