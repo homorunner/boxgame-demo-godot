@@ -25,6 +25,10 @@ func move_to(pos: Vector2i, dir: String):
 		pending_positions.append(pos)
 		pending_anims.append(dir)
 
+func reset_animation():
+	pending_positions.clear()
+	idle = true
+
 func _process(delta: float):
 	if not idle:
 		if self.position.distance_to(target_position * Globals.grid_size) < (delta * speed).length() + 0.01:

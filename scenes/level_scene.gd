@@ -2,7 +2,15 @@ extends Node2D
 
 # constants
 enum {NODE_UNDEFINED, NODE_WALL, NODE_GRASS, NODE_BOX}
-const Colors = [Color.WHITE, Color.GOLD, Color.CYAN, Color.ORANGE_RED, Color.CORNFLOWER_BLUE, Color.PALE_GREEN]
+const Colors = [
+	Color.WHITE,
+	Color.GOLD,
+	Color.CYAN,
+	Color.ORANGE_RED,
+	Color.CORNFLOWER_BLUE,
+	Color.PALE_GREEN,
+	Color.FLORAL_WHITE,
+]
 
 const BasicSquare = preload("res://scenes/basic_square.tscn")
 
@@ -243,7 +251,7 @@ var current_level = 0
 
 func init(level:int):
 	current_level = level
-	var game_map_string = Globals.levels[level]
+	var game_map_string = Levels.LEVEL_MAP[level]
 	var _lines = game_map_string.split('\n')
 	var game_map_lines = []
 	rows = 0
@@ -322,6 +330,8 @@ func deactivate():
 func reinit():
 	gamenodes.clear()
 	
+	$Player.reset_animation()
+	
 	for node in box_nodes:
 		remove_child(node.basic_square)
 	box_nodes.clear()
@@ -340,6 +350,8 @@ func _input(event):
 			on_move_right()
 		elif event.is_action("restart"):
 			reinit()
+		elif event.is_action("skip_level"):
+			win.emit()
 
 func _process(delta: float) -> void:
 	pass
