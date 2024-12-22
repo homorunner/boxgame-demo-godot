@@ -119,6 +119,10 @@ func init_box_map():
 	for i in range(len(gamenodes)):
 		if gamenodes[i].type == NODE_BOX:
 			var box: Box = gamenodes[i]
+			# box may go outside the board, in this case we don't write it into the map.
+			# TODO: maybe reconsider the logic here
+			if box.pos.x < 0 or box.pos.x >= rows or box.pos.y < 0 or box.pos.y >= columns:
+				continue
 			box_map[box.pos.x][box.pos.y] = i
 
 func init_wall_map():

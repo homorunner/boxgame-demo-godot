@@ -1,9 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://dqvdwkal1dx22"]
+[gd_scene load_steps=12 format=3 uid="uid://dqvdwkal1dx22"]
 
 [ext_resource type="Script" path="res://scenes/level_scene.gd" id="1_a8us4"]
-[ext_resource type="TileSet" uid="uid://bwmsi8dayhcem" path="res://tiles/wall.tres" id="2_e7pbq"]
 [ext_resource type="Script" path="res://scenes/wall.gd" id="3_c4336"]
-[ext_resource type="TileSet" uid="uid://w3etkuk2ark5" path="res://tiles/grass.tres" id="4_c3jx2"]
 [ext_resource type="Script" path="res://scenes/grass.gd" id="5_ir2dv"]
 [ext_resource type="Script" path="res://scenes/player.gd" id="6_les4b"]
 [ext_resource type="Texture2D" uid="uid://btekdt3ydbo4b" path="res://assets/player.png" id="7_56efn"]
@@ -155,17 +153,11 @@ _data = {
 [node name="MainGameScene" type="Node2D"]
 script = ExtResource("1_a8us4")
 
-[node name="Wall" type="TileMapLayer" parent="."]
-scale = Vector2(3, 3)
-tile_set = ExtResource("2_e7pbq")
+[node name="Wall" type="Node2D" parent="."]
 script = ExtResource("3_c4336")
-metadata/_edit_group_ = true
 
-[node name="Grass" type="TileMapLayer" parent="."]
-scale = Vector2(3, 3)
-tile_set = ExtResource("4_c3jx2")
+[node name="Grass" type="Node2D" parent="."]
 script = ExtResource("5_ir2dv")
-metadata/_edit_group_ = true
 
 [node name="Player" type="Node2D" parent="."]
 z_index = 1
