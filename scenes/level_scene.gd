@@ -3,15 +3,6 @@ extends Node2D
 
 # constants
 enum {NODE_UNDEFINED, NODE_WALL, NODE_GRASS, NODE_BOX}
-const Colors = [
-	Color.WHITE,
-	Color.GOLD,
-	Color.CYAN,
-	Color.ORANGE_RED,
-	Color.CORNFLOWER_BLUE,
-	Color.PALE_GREEN,
-	Color.FLORAL_WHITE,
-]
 
 const BasicSquare = preload("res://scenes/basic_square.tscn")
 
@@ -65,13 +56,13 @@ class BoxNode:
 	func _init(_box: Box):
 		var _basic_square = BasicSquare.instantiate()
 		_basic_square.position = _box.pos * Globals.grid_size
-		_basic_square.set_color(Colors[_box.color_id])
+		_basic_square.set_color(Globals.Colors[_box.color_id])
 		
 		self.box = _box
 		self.basic_square = _basic_square
 	
 	func set_color(color_id: int):
-		basic_square.set_color(Colors[color_id])
+		basic_square.set_color(Globals.Colors[color_id])
 	
 	func move_to(pos: Vector2i, dir: String):
 		self.basic_square.move_to(pos * Globals.grid_size, dir)
@@ -87,6 +78,7 @@ var destination_pos: Vector2i
 var gamenodes: Array[GameNode] = []
 var polynominos: Array[Polynomino] = []
 var wall_map: Array[Array] = []
+var grass_map: Array[Array] = []
 var box_map: Array[Array] = []
 
 # Dynamic nodes
@@ -112,17 +104,13 @@ func init_box_map():
 	box_map.clear()
 	for i in range(columns):
 		var arr = []
-		arr.resize(rows)
+		arr.resize(rows + 1)
 		arr.fill(-1)
 		box_map.append(arr)
 	
 	for i in range(len(gamenodes)):
 		if gamenodes[i].type == NODE_BOX:
 			var box: Box = gamenodes[i]
-			# box may go outside the board, in this case we don't write it into the map.
-			# TODO: maybe reconsider the logic here
-			if box.pos.x < 0 or box.pos.x >= rows or box.pos.y < 0 or box.pos.y >= columns:
-				continue
 			box_map[box.pos.x][box.pos.y] = i
 
 func init_wall_map():
@@ -136,6 +124,18 @@ func init_wall_map():
 	for i in range(len(gamenodes)):
 		if gamenodes[i].type == NODE_WALL:
 			wall_map[gamenodes[i].pos.x][gamenodes[i].pos.y] = i
+
+func init_grass_map():
+	grass_map.clear()
+	for i in range(columns):
+		var arr = []
+		arr.resize(rows)
+		arr.fill(-1)
+		grass_map.append(arr)
+	
+	for i in range(len(gamenodes)):
+		if gamenodes[i].type == NODE_GRASS:
+			grass_map[gamenodes[i].pos.x][gamenodes[i].pos.y] = i
 
 func init_polys():
 	polynominos.clear()
@@ -297,6 +297,7 @@ func init(level:int):
 
 	# Initialize maps
 	init_wall_map()
+	init_grass_map()
 	init_box_map()
 	
 	# Initialize polynominos
@@ -313,7 +314,14 @@ func init(level:int):
 	# Set wall cells (static)
 	for i in range(len(gamenodes)):
 		if gamenodes[i].type == NODE_WALL:
-			$Wall.add_node(gamenodes[i].pos)
+			var pos = gamenodes[i].pos
+			var shadow = []
+			shadow.append(pos.x < columns - 1 and grass_map[pos.x+1][pos.y] > 0) # right
+			shadow.append(pos.x > 0 and grass_map[pos.x-1][pos.y] > 0)           # left
+			shadow.append(pos.y > 0 and grass_map[pos.x][pos.y-1] > 0)           # up
+			shadow.append(pos.y < rows - 1 and grass_map[pos.x][pos.y+1] > 0)    # down
+			shadow.append(pos.x < columns - 1 and pos.y < rows - 1 and grass_map[pos.x+1][pos.y+1] > 0) # right-down
+			$Wall.add_node(pos, shadow)
 	$Wall.flush_nodes()
 	
 	# Basic square

@@ -24,7 +24,7 @@ o...o.o
 oooooEo
 """,  # Level 1.0: 教学，体验一下推箱子。
 	"""
-o_ooooo
+o.ooooo
 oSo...o
 o..111o
 o...2.o
