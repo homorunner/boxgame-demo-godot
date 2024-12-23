@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 const grid_size = 48.0

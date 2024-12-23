@@ -10,6 +10,8 @@ const LEVEL_RECTS: Array[Vector2i] = [
 	Vector2i(10, 10),# Level 1.4
 	Vector2i(12, 9), # Level 1.5
 	Vector2i(10, 8), # Level 1.6
+	Vector2i(7, 8),  # Level 2.0
+	Vector2i(7, 8),  # Level 2.1
 ]
 
 const LEVEL_MAP = [
@@ -89,4 +91,24 @@ o...33..4o
 o...3...4o
 ooooooooEo
 """, # Level 1.6: 综合关，难度指数2，有趣程度3，需要把4号方块先进再出，求解过程比较线性。
+	"""
+oooSooo
+o.....o
+o.1111o
+o2....o
+o2....o
+o2....o
+>2....<
+oooEooo
+""", # Level 2.0: 引入消除
+	"""
+oooSooo
+>222..<
+>.2...<
+>.....<
+>..11.<
+>...11<
+>...33<
+ooooEoo
+""", # Level 2.1: 基于消除的简单关卡
 ]

@@ -2,7 +2,7 @@
 extends Node2D
 
 # constants
-enum {NODE_UNDEFINED, NODE_WALL, NODE_GRASS, NODE_BOX}
+enum {NODE_UNDEFINED, NODE_WALL, NODE_GRASS, NODE_BOX, NODE_LASER_L, NODE_LASER_R}
 
 const BasicSquare = preload("res://scenes/basic_square.tscn")
 
@@ -20,9 +20,9 @@ class GameNode:
 class Wall:
 	extends GameNode
 	
-	func _init(_pos_x, _pos_y):
+	func _init(_pos_x, _pos_y, _type):
 		super(_pos_x, _pos_y)
-		type = NODE_WALL
+		type = _type
 
 class Grass:
 	extends GameNode
@@ -51,7 +51,7 @@ class BoxNode:
 	
 	# this is the instance of dynamic created BasicSquare(Node2D)
 	# now i don't find a way to include definition of class BasicSquare in this script.
-	var basic_square: Node
+	var basic_square: Node2D
 	
 	func _init(_box: Box):
 		var _basic_square = BasicSquare.instantiate()
@@ -66,6 +66,10 @@ class BoxNode:
 	
 	func move_to(pos: Vector2i, dir: String):
 		self.basic_square.move_to(pos * Globals.grid_size, dir)
+	
+	func remove():
+		box.type = NODE_UNDEFINED
+		basic_square.hide()
 
 class Polynomino:
 	var poly_id: int
@@ -80,9 +84,13 @@ var polynominos: Array[Polynomino] = []
 var wall_map: Array[Array] = []
 var grass_map: Array[Array] = []
 var box_map: Array[Array] = []
+var lasers: Array[Vector2i] = []
 
 # Dynamic nodes
 var box_nodes: Array[BoxNode] = []
+
+func is_wall(node):
+	return node == NODE_WALL or node == NODE_LASER_L or node == NODE_LASER_R
 
 func get_box(x, y) -> Box:
 	if x < 0 or x >= columns or y < 0 or y >= rows:
@@ -122,8 +130,12 @@ func init_wall_map():
 		wall_map.append(arr)
 	
 	for i in range(len(gamenodes)):
-		if gamenodes[i].type == NODE_WALL:
+		if is_wall(gamenodes[i].type):
 			wall_map[gamenodes[i].pos.x][gamenodes[i].pos.y] = i
+			if gamenodes[i].type == NODE_LASER_L:
+				lasers.append(Vector2i(i, 0))
+			elif gamenodes[i].type == NODE_LASER_R:
+				lasers[len(lasers)-1].y = i
 
 func init_grass_map():
 	grass_map.clear()
@@ -210,6 +222,22 @@ func test_collision_and_push(dx: int, dy: int, dir: String) -> bool:
 				
 			# after a poly move, we reinit the box map
 			init_box_map()
+		
+		for laser in lasers:
+			var l = gamenodes[laser.x].pos.x
+			var r = gamenodes[laser.y].pos.x
+			var y = gamenodes[laser.x].pos.y
+			assert(y == gamenodes[laser.y].pos.y)
+			var test = true
+			for i in range(l+1, r):
+				if box_map[i][y] == -1:
+					test = false
+			if test:
+				for i in range(l+1, r):
+					var boxx = get_box(i, y)
+					box_nodes[boxx.node_id].remove()
+					box_map[i][y] = -1
+				init_polys()
 
 	return can_move
 	
@@ -278,7 +306,11 @@ func init(level:int):
 			elif line[j] == '.':
 				gamenodes.append(Grass.new(j, i))
 			elif line[j] == 'o':
-				gamenodes.append(Wall.new(j, i))
+				gamenodes.append(Wall.new(j, i, NODE_WALL))
+			elif line[j] == '>':
+				gamenodes.append(Wall.new(j, i, NODE_LASER_L))
+			elif line[j] == '<':
+				gamenodes.append(Wall.new(j, i, NODE_LASER_R))
 			elif line[j] >= '1' and line[j] <= '9':
 				gamenodes.append(Grass.new(j, i)) # currently, block must start on a grass node.
 				gamenodes.append(Box.new(j, i, len(gamenodes), line[j].to_int()))
@@ -313,7 +345,7 @@ func init(level:int):
 	
 	# Set wall cells (static)
 	for i in range(len(gamenodes)):
-		if gamenodes[i].type == NODE_WALL:
+		if is_wall(gamenodes[i].type):
 			var pos = gamenodes[i].pos
 			var shadow = []
 			shadow.append(pos.x < columns - 1 and grass_map[pos.x+1][pos.y] > 0) # right
