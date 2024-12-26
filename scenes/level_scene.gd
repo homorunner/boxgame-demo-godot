@@ -16,6 +16,11 @@ class GameNode:
 	
 	func _init(_pos_x: int, _pos_y: int):
 		pos = Vector2i(_pos_x, _pos_y)
+	
+	func clone():
+		var copy = new(pos.x, pos.y)
+		copy.type = self.type
+		return copy
 
 class Wall:
 	extends GameNode
@@ -23,6 +28,11 @@ class Wall:
 	func _init(_pos_x, _pos_y, _type):
 		super(_pos_x, _pos_y)
 		type = _type
+
+	func clone():
+		var copy = new(pos.x, pos.y, self.type)
+		copy.type = self.type
+		return copy
 
 class Grass:
 	extends GameNode
@@ -45,6 +55,12 @@ class Box:
 		block_id = _block_id
 		color_id = _color_id
 		polyomino_id = -1
+	
+	func clone():
+		var copy = new(pos.x, pos.y, block_id, color_id)
+		copy.node_id = self.node_id
+		copy.polyomino_id = self.polyomino_id
+		return copy
 
 class BoxNode:
 	var box: Box
@@ -88,6 +104,10 @@ var lasers: Array[Vector2i] = []
 
 # Dynamic nodes
 var box_nodes: Array[BoxNode] = []
+
+class GameState:
+	var player_pos: Vector2i
+	var gamenodes: Array[GameNode]
 
 func is_wall(node):
 	return node == NODE_WALL or node == NODE_LASER_L or node == NODE_LASER_R
@@ -188,7 +208,7 @@ func init_polys():
 				polynominos.append(poly)
 				print('initializing polys: id = ', poly.poly_id, ', box_ids = ', poly.box_ids)
 
-func test_collision_and_push(dx: int, dy: int, dir: String) -> bool:
+func test_collision(dx: int, dy: int, dir: String) -> bool:
 	var wall = get_wall(player_pos.x + dx, player_pos.y + dy)
 	if wall != null:
 		return false
@@ -196,9 +216,6 @@ func test_collision_and_push(dx: int, dy: int, dir: String) -> bool:
 	var box = get_box(player_pos.x + dx, player_pos.y + dy)
 	var can_move = true
 	if box != null:
-		# TODO: maybe we should consider if this is allowed to push two polys in one move.
-		# currently it is not allowed.
-
 		var poly = polynominos[box.polyomino_id]
 		for i in poly.box_ids:
 			var boxx: Box = gamenodes[i]
@@ -212,16 +229,25 @@ func test_collision_and_push(dx: int, dy: int, dir: String) -> bool:
 			if sidewall != null:
 				can_move = false
 				break
+
+	return can_move
+
+func move(dx: int, dy: int, dir: String):
+	player_pos.x += dx
+	player_pos.y += dy
+	launch_movement(dir)
+	var box = get_box(player_pos.x, player_pos.y)
+	if box != null:
+		var poly = polynominos[box.polyomino_id]
 		
-		if can_move:
-			for i in poly.box_ids:
-				var boxx: Box = gamenodes[i]
-				boxx.pos.x += dx
-				boxx.pos.y += dy
-				box_nodes[boxx.node_id].move_to(boxx.pos, dir)
-				
-			# after a poly move, we reinit the box map
-			init_box_map()
+		for i in poly.box_ids:
+			var boxx: Box = gamenodes[i]
+			boxx.pos.x += dx
+			boxx.pos.y += dy
+			box_nodes[boxx.node_id].move_to(boxx.pos, dir)
+			
+		# after a poly move, we reinit the box map
+		init_box_map()
 		
 		for laser in lasers:
 			var l = gamenodes[laser.x].pos.x
@@ -239,33 +265,31 @@ func test_collision_and_push(dx: int, dy: int, dir: String) -> bool:
 					box_map[i][y] = -1
 				init_polys()
 
-	return can_move
-	
 func on_move_up():
-	if test_collision_and_push(0, -1, 'up'):
-		player_pos.y -= 1
-		launch_movement('up')
+	if test_collision(0, -1, 'up'):
+		push_state()
+		move(0, -1, 'up')
 	else:
 		launch_movement('up')
 
 func on_move_down():
-	if test_collision_and_push(0, 1, 'down'):
-		player_pos.y += 1
-		launch_movement('down')
+	if test_collision(0, 1, 'down'):
+		push_state()
+		move(0, 1, 'down')
 	else:
 		launch_movement('down')
 
 func on_move_left():
-	if test_collision_and_push(-1, 0, 'left'):
-		player_pos.x -= 1
-		launch_movement('left')
+	if test_collision(-1, 0, 'left'):
+		push_state()
+		move(-1, 0, 'left')
 	else:
 		launch_movement('left')
 
 func on_move_right():
-	if test_collision_and_push(1, 0, 'right'):
-		player_pos.x += 1
-		launch_movement('right')
+	if test_collision(1, 0, 'right'):
+		push_state()
+		move(1, 0, 'right')
 	else:
 		launch_movement('right')
 
@@ -383,6 +407,39 @@ func reinit():
 	
 	init(current_level)
 
+var history_states: Array[GameState] = []
+
+func pop_state():
+	if len(history_states) == 0: return
+	var gamestate = history_states.pop_back()
+	print(gamestate)
+	player_pos = gamestate.player_pos
+	gamenodes = gamestate.gamenodes
+	init_wall_map()
+	init_grass_map()
+	init_box_map()
+	init_polys()
+	
+	for node in box_nodes:
+		remove_child(node.basic_square)
+	box_nodes.clear()
+	for i in range(len(gamenodes)):
+		if gamenodes[i].type == NODE_BOX:
+			var box_node = BoxNode.new(gamenodes[i])
+			add_child(box_node.basic_square)
+			box_node.box.node_id = len(box_nodes)
+			box_nodes.append(box_node)
+	
+	$Player.reset_animation()
+	$Player.position = player_pos * Globals.grid_size
+
+func push_state():
+	var gamestate = GameState.new()
+	gamestate.player_pos = player_pos
+	for node in gamenodes:
+		gamestate.gamenodes.append(node.clone())
+	history_states.append(gamestate)
+
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		if event.is_action("up"):
@@ -397,6 +454,8 @@ func _input(event):
 			reinit()
 		elif event.is_action("skip_level"):
 			win.emit()
+		elif event.is_action("undo"):
+			pop_state()
 
 func _process(delta: float) -> void:
 	pass

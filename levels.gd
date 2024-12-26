@@ -9,6 +9,7 @@ const LEVEL_RECTS: Array[Vector2i] = [
 	Vector2i(10, 8), # Level 1.6
 	Vector2i(7, 8),  # Level 2.0
 	Vector2i(7, 8),  # Level 2.1
+	Vector2i(9, 10),  # Level 2.2
 ]
 
 const LEVEL_MAP = [
@@ -81,4 +82,16 @@ oooSooo
 >...33<
 ooooEoo
 """, # Level 2.1: 基于消除的简单关卡
+	"""
+ooooooSoo
+>.......<
+>.1.....<
+>.11....<
+>.1..<ooo
+>..33<ooo
+>.33....<
+>..22244<
+>...2.44<
+oooooooEo
+""", # Level 2.2
 ]
