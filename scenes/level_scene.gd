@@ -206,7 +206,6 @@ func init_polys():
 							poly.box_ids.append(boxx.block_id)
 							boxx.polyomino_id = poly.poly_id
 				polynominos.append(poly)
-				print('initializing polys: id = ', poly.poly_id, ', box_ids = ', poly.box_ids)
 
 func test_collision(dx: int, dy: int, dir: String) -> bool:
 	var wall = get_wall(player_pos.x + dx, player_pos.y + dy)
@@ -320,7 +319,6 @@ func init(level:int):
 			game_map_lines.append(line)
 			rows += 1
 			columns = max(columns, len(line))
-	print('parsing game map: rows = ', rows, ', columns = ', columns)
 	
 	for i in range(rows):
 		var line = game_map_lines[i]
@@ -349,7 +347,6 @@ func init(level:int):
 				destination_pos.y = i
 			else:
 				gamenodes.append(GameNode.new(j, i))
-	print('parsing game map: gamenodes.size() = ', len(gamenodes))
 
 	# Initialize maps
 	init_wall_map()
@@ -412,7 +409,6 @@ var history_states: Array[GameState] = []
 func pop_state():
 	if len(history_states) == 0: return
 	var gamestate = history_states.pop_back()
-	print(gamestate)
 	player_pos = gamestate.player_pos
 	gamenodes = gamestate.gamenodes
 	init_wall_map()

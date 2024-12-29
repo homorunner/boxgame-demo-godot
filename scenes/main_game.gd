@@ -35,11 +35,11 @@ func _ready() -> void:
 				for column in range(len(line)):
 					if line[column] == 'S':
 						start_pos.append(Vector2i(column, row))
-						print('level ', level_id, ' start_pos ', start_pos)
+						print('level ', level_id, ' start_pos ', start_pos.back())
 						has_start = true
 					elif line[column] == 'E':
 						end_pos.append(Vector2i(column, row))
-						print('level ', level_id, ' end_pos ', end_pos)
+						print('level ', level_id, ' end_pos ', end_pos.back())
 						has_end = true
 		if not has_start or not has_end:
 			print('Error: Level ', level_id, ' does not has S or E!')

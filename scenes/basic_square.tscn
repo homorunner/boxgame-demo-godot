@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scenes/basic_square.gd" id="1_6u2xt"]
 
 [node name="BasicSquare" type="Node2D"]
+z_index = 1
 script = ExtResource("1_6u2xt")
 
 [node name="ColorBorder" type="ColorRect" parent="."]
