@@ -1,6 +1,8 @@
 @tool
 extends Node
 
+@onready var you_win: Node2D = $"../YouWin"
+
 const max_width = 480
 const max_height = 480
 
@@ -64,7 +66,10 @@ func _ready() -> void:
 				levels[level_id + 1].activate()
 				target_position = camera_bases[level_id + 1]
 			level.win.connect(goto_next_level)
-		# TODO: last_level.win may connect to a YOU-WIN stage.
+		else:
+			var show_you_win = func():
+				you_win.show()
+			level.win.connect(show_you_win)
 		
 		levels.append(level)
 		add_child(level)
