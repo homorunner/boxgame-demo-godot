@@ -437,21 +437,20 @@ func push_state():
 	history_states.append(gamestate)
 
 func _input(event):
-	if event is InputEventKey and event.pressed:
-		if event.is_action("up"):
-			on_move_up()
-		elif event.is_action("down"):
-			on_move_down()
-		elif event.is_action("left"):
-			on_move_left()
-		elif event.is_action("right"):
-			on_move_right()
-		elif event.is_action("restart"):
-			reinit()
-		elif event.is_action("skip_level"):
-			win.emit()
-		elif event.is_action("undo"):
-			pop_state()
+	if event.is_action_pressed("up"):
+		on_move_up()
+	elif event.is_action_pressed("down"):
+		on_move_down()
+	elif event.is_action_pressed("left"):
+		on_move_left()
+	elif event.is_action_pressed("right"):
+		on_move_right()
+	elif event.is_action_pressed("restart"):
+		reinit()
+	elif event.is_action_pressed("skip_level"):
+		win.emit()
+	elif event.is_action_pressed("undo"):
+		pop_state()
 
 func _process(delta: float) -> void:
 	pass

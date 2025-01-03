@@ -1,6 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://bucwjcoc1tojv"]
+[gd_scene load_steps=13 format=3 uid="uid://bucwjcoc1tojv"]
 
 [ext_resource type="Script" path="res://scenes/main_game.gd" id="1_p042y"]
+[ext_resource type="Texture2D" uid="uid://dv78m6e4n6qkt" path="res://assets/btnleft.png" id="2_p1lfq"]
+[ext_resource type="Texture2D" uid="uid://cw8l623wjip2f" path="res://assets/btnright.png" id="3_7suqn"]
+[ext_resource type="Texture2D" uid="uid://cm003gpt4j1wu" path="res://assets/btnup.png" id="3_n1f0h"]
+[ext_resource type="Texture2D" uid="uid://cjsxxgaq5f8bd" path="res://assets/btndown.png" id="4_q1rm3"]
+[ext_resource type="Script" path="res://scenes/button.gd" id="6_em8a8"]
+[ext_resource type="Texture2D" uid="uid://c1ab2j3lcxwxx" path="res://assets/btnundo.png" id="7_jhqyd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5mrbl"]
+radius = 41.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2tn3j"]
+radius = 41.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yme8t"]
+radius = 41.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_a8xj8"]
+radius = 41.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4ur63"]
+radius = 40.0
 
 [node name="Root" type="Node"]
 
@@ -19,3 +40,43 @@ offset_right = 567.0
 offset_bottom = 390.0
 theme_override_font_sizes/normal_font_size = 48
 text = "You Win!"
+
+[node name="LeftButton" type="TouchScreenButton" parent="."]
+position = Vector2(22, 541)
+texture_normal = ExtResource("2_p1lfq")
+shape = SubResource("CircleShape2D_5mrbl")
+action = "left"
+visibility_mode = 1
+script = ExtResource("6_em8a8")
+
+[node name="RightButton" type="TouchScreenButton" parent="."]
+position = Vector2(211, 541)
+texture_normal = ExtResource("3_7suqn")
+shape = SubResource("CircleShape2D_2tn3j")
+action = "right"
+visibility_mode = 1
+script = ExtResource("6_em8a8")
+
+[node name="DownButton" type="TouchScreenButton" parent="."]
+position = Vector2(116, 541)
+texture_normal = ExtResource("4_q1rm3")
+shape = SubResource("CircleShape2D_yme8t")
+action = "down"
+visibility_mode = 1
+script = ExtResource("6_em8a8")
+
+[node name="UpButton" type="TouchScreenButton" parent="."]
+position = Vector2(116, 448)
+texture_normal = ExtResource("3_n1f0h")
+shape = SubResource("CircleShape2D_a8xj8")
+action = "up"
+visibility_mode = 1
+script = ExtResource("6_em8a8")
+
+[node name="UndoButton" type="TouchScreenButton" parent="."]
+position = Vector2(517, 539)
+texture_normal = ExtResource("7_jhqyd")
+shape = SubResource("CircleShape2D_4ur63")
+action = "undo"
+visibility_mode = 1
+script = ExtResource("6_em8a8")

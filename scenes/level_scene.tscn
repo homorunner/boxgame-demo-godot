@@ -161,6 +161,7 @@ script = ExtResource("5_ir2dv")
 
 [node name="Player" type="Node2D" parent="."]
 z_index = 1
+position = Vector2(0, 336)
 script = ExtResource("6_les4b")
 
 [node name="PlayerNode" type="Sprite2D" parent="Player"]
