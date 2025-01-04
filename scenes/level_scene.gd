@@ -8,6 +8,7 @@ const BasicSquare = preload("res://scenes/basic_square.tscn")
 
 # signals
 signal win
+signal goback
 
 # class definitions
 class GameNode:
@@ -94,7 +95,11 @@ class Polynomino:
 var rows = 0
 var columns = 0
 var player_pos: Vector2i
+var start_pos: Vector2i
 var destination_pos: Vector2i
+var back_dir_x = 0
+var back_dir_y = 0
+var lastmove: Vector2i
 var gamenodes: Array[GameNode] = []
 var polynominos: Array[Polynomino] = []
 var wall_map: Array[Array] = []
@@ -265,32 +270,38 @@ func move(dx: int, dy: int, dir: String):
 				init_polys()
 
 func on_move_up():
-	if test_collision(0, -1, 'up'):
-		push_state()
-		move(0, -1, 'up')
-	else:
-		launch_movement('up')
+	on_move(0, -1)
 
 func on_move_down():
-	if test_collision(0, 1, 'down'):
-		push_state()
-		move(0, 1, 'down')
-	else:
-		launch_movement('down')
+	on_move(0, 1)
 
 func on_move_left():
-	if test_collision(-1, 0, 'left'):
-		push_state()
-		move(-1, 0, 'left')
-	else:
-		launch_movement('left')
+	on_move(-1, 0)
 
 func on_move_right():
-	if test_collision(1, 0, 'right'):
+	on_move(1, 0)
+
+func on_move(dir_x: int, dir_y: int):
+	var action = ""
+	if dir_x == 0 and dir_y == -1:
+		action = "up"
+	elif dir_x == 0 and dir_y == 1:
+		action = "down"
+	elif dir_x == -1 and dir_y == 0:
+		action = "left"
+	elif dir_x == 1 and dir_y == 0:
+		action = "right"
+	
+	if dir_x == back_dir_x and dir_y == back_dir_y and player_pos == start_pos:
+		goback.emit(dir_x, dir_y)
+		return
+	
+	lastmove = Vector2i(dir_x, dir_y)
+	if test_collision(dir_x, dir_y, action):
 		push_state()
-		move(1, 0, 'right')
+		move(dir_x, dir_y, action)
 	else:
-		launch_movement('right')
+		launch_movement(action)
 
 func launch_movement(dir: String):
 	$Player.move_to(player_pos, dir)
@@ -298,7 +309,7 @@ func launch_movement(dir: String):
 func win_detect():
 	if $Player.current_position == destination_pos:
 		print('level ', current_level, ' win.')
-		win.emit()
+		win.emit(lastmove.x, lastmove.y)
 
 func init_signals():
 	$Player.after_move.connect(win_detect)
@@ -340,6 +351,7 @@ func init(level:int):
 				gamenodes.append(Grass.new(j, i)) # currently, player starting point must be a grass node.
 				player_pos.x = j
 				player_pos.y = i
+				start_pos = player_pos
 				$Player.position = player_pos * Globals.grid_size
 			elif line[j] == 'E':
 				gamenodes.append(Grass.new(j, i)) # currently, destination point must be a grass node.
@@ -447,8 +459,8 @@ func _input(event):
 		on_move_right()
 	elif event.is_action_pressed("restart"):
 		reinit()
-	elif event.is_action_pressed("skip_level"):
-		win.emit()
+	#elif event.is_action_pressed("skip_level"):
+		#win.emit()
 	elif event.is_action_pressed("undo"):
 		pop_state()
 

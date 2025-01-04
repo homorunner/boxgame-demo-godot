@@ -60,16 +60,28 @@ func _ready() -> void:
 		var camera_base_y = max(camera_up_min, (Globals.window_height - Levels.LEVEL_RECTS[level_id].y * Globals.grid_size) * 0.5)
 		camera_bases.append(Vector2(camera_base_x, camera_base_y) - level.position)
 		
+		# Goto next level or show you_win.
 		if level_id < level_count - 1:
-			var goto_next_level = func():
+			var goto_next_level = func(from_dir_x: int, from_dir_y: int):
 				levels[level_id].deactivate()
 				levels[level_id + 1].activate()
+				levels[level_id + 1].back_dir_x = -from_dir_x
+				levels[level_id + 1].back_dir_y = -from_dir_y
 				target_position = camera_bases[level_id + 1]
 			level.win.connect(goto_next_level)
 		else:
 			var show_you_win = func():
 				you_win.show()
 			level.win.connect(show_you_win)
+		
+		# Go back to previous level.
+		if level_id > 0:
+			var goto_previous_level = func(from_dir_x: int, from_dir_y: int):
+				levels[level_id].deactivate()
+				levels[level_id - 1].activate()
+				levels[level_id - 1].on_move(from_dir_x, from_dir_y)
+				target_position = camera_bases[level_id - 1]
+			level.goback.connect(goto_previous_level)
 		
 		levels.append(level)
 		add_child(level)
