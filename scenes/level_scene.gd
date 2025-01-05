@@ -114,6 +114,8 @@ class GameState:
 	var player_pos: Vector2i
 	var gamenodes: Array[GameNode]
 
+var move_disabled = false
+
 func is_wall(node):
 	return node == NODE_WALL or node == NODE_LASER_L or node == NODE_LASER_R
 
@@ -239,6 +241,10 @@ func test_collision(dx: int, dy: int, dir: String) -> bool:
 func move(dx: int, dy: int, dir: String):
 	player_pos.x += dx
 	player_pos.y += dy
+
+	if player_pos == destination_pos:
+		move_disabled = true
+	
 	launch_movement(dir)
 	var box = get_box(player_pos.x, player_pos.y)
 	if box != null:
@@ -282,6 +288,9 @@ func on_move_right():
 	on_move(1, 0)
 
 func on_move(dir_x: int, dir_y: int):
+	if move_disabled:
+		return
+
 	var action = ""
 	if dir_x == 0 and dir_y == -1:
 		action = "up"
@@ -293,6 +302,8 @@ func on_move(dir_x: int, dir_y: int):
 		action = "right"
 	
 	if dir_x == back_dir_x and dir_y == back_dir_y and player_pos == start_pos:
+		$Player.reset_animation()
+		move_disabled = true
 		goback.emit(dir_x, dir_y)
 		return
 	
@@ -309,6 +320,7 @@ func launch_movement(dir: String):
 func win_detect():
 	if $Player.current_position == destination_pos:
 		print('level ', current_level, ' win.')
+		$Player.reset_animation()
 		win.emit(lastmove.x, lastmove.y)
 
 func init_signals():
@@ -399,10 +411,12 @@ func init(level:int):
 
 func activate():
 	self.set_process_input(true)
+	move_disabled = false
 	$Player.show()
 	
 func deactivate():
 	self.set_process_input(false)
+	move_disabled = true
 	$Player.hide()
 
 func reinit():
