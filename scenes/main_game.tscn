@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bucwjcoc1tojv"]
+[gd_scene load_steps=14 format=3 uid="uid://bucwjcoc1tojv"]
 
 [ext_resource type="Script" path="res://scenes/main_game.gd" id="1_p042y"]
 [ext_resource type="Texture2D" uid="uid://dv78m6e4n6qkt" path="res://assets/btnleft.png" id="2_p1lfq"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cjsxxgaq5f8bd" path="res://assets/btndown.png" id="4_q1rm3"]
 [ext_resource type="Script" path="res://scenes/button.gd" id="6_em8a8"]
 [ext_resource type="Texture2D" uid="uid://c1ab2j3lcxwxx" path="res://assets/btnundo.png" id="7_jhqyd"]
+[ext_resource type="AudioStream" uid="uid://btxit8ibova7m" path="res://assets/bgm.ogg" id="8_xiu6v"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5mrbl"]
 radius = 41.0
@@ -80,3 +81,7 @@ shape = SubResource("CircleShape2D_4ur63")
 action = "undo"
 visibility_mode = 1
 script = ExtResource("6_em8a8")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_xiu6v")
+autoplay = true
